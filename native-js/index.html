@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>GolosExplorer</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" crossorigin="anonymous">
+		<link rel="stylesheet" href="custom.css?201804041330" />
+	</head>
+	<body>
+		<header>
+			<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+				<a class="navbar-brand" href="#">GolosExplorer</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<form class="form-inline my-2 my-lg-0 col-sm-3" id="search-account">
+						<div class="input-group">
+							<input class="form-control form-control-sm" name="account-username" type="search" placeholder="Account username" aria-label="Account username" required="">
+							<div class="input-group-append">
+								<button class="btn btn-danger btn-sm" id="reset-account" type="button"><span class="icon-cross"></span></button>
+								<button class="btn btn-dark btn-sm" type="submit"><span class="icon-user"></span> Get Account</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</nav>
+		</header>
+		<article>
+			<main role="main" class="container-fluid">
+				<br>
+				<div class="row" id="main-page">
+					<div class="col-12">
+						Native JavaScript
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						<div id="about-account-page">
+							<form class="form-inline">
+								<h5>
+									Total <span class="badge badge-info" id="about-account-all-count">...</span> transactions, showing <span class="badge badge-info" id="about-account-filtered-count">...</span> transactions,
+									<select class="form-control form-control-sm" id="about-account-filter">
+										<option value="">none</option>
+										<option value="account_create">account_create</option>
+										<option value="account_update">account_update</option>
+										<option value="account_witness_proxy">account_witness_proxy</option>
+										<option value="account_witness_vote">account_witness_vote</option>
+										<option value="author_reward">author_reward</option>
+										<option value="cancel_transfer_from_savings">cancel_transfer_from_savings</option>
+										<option value="change_recovery_accounts">change_recovery_accounts</option>
+										<option value="comment">comment</option>
+										<option value="comment_benefactor_reward">comment_benefactor_reward</option>
+										<option value="comment_options">comment_options</option>
+										<option value="convert">convert</option>
+										<option value="custom">custom</option>
+										<option value="custom_json">custom_json</option>
+										<option value="curation_reward">curation_reward</option>
+										<option value="delete_comment">delete_comment</option>
+										<option value="escrow_approve">escrow_approve</option>
+										<option value="escrow_dispute">escrow_dispute</option>
+										<option value="escrow_release">escrow_release</option>
+										<option value="escrow_transfer">escrow_transfer</option>
+										<option value="feed_publish">feed_publish</option>
+										<option value="fill_convert_request">fill_convert_request</option>
+										<option value="fill_order">fill_order</option>
+										<option value="fill_transfer_from_saving">fill_transfer_from_saving</option>
+										<option value="fill_vesting_withdraw">fill_vesting_withdraw</option>
+										<option value="follow">follow</option>
+										<option value="interest">interest</option>
+										<option value="limit_order_cancel">limit_order_cancel</option>
+										<option value="limit_order_create">limit_order_create</option>
+										<option value="limit_order_create2">limit_order_create2</option>
+										<option value="liquidity_reward">liquidity_reward</option>
+										<option value="pow2">pow2</option>
+										<option value="reblog">reblog</option>
+										<option value="recover_account">recover_account</option>
+										<option value="recover_account_recovery">recover_account_recovery</option>
+										<option value="set_withdraw_vesting_route">set_withdraw_vesting_route</option>
+										<option value="shutdown_witness">shutdown_witness</option>
+										<option value="transfer" selected="">transfer</option>
+										<option value="transfer_from_savings">transfer_from_savings</option>
+										<option value="transfer_to_savings">transfer_to_savings</option>
+										<option value="transfer_to_vesting">transfer_to_vesting</option>
+										<option value="vesting_deposit">vesting_deposit</option>
+										<option value="vote">vote</option>
+										<option value="withdraw_vesting">withdraw_vesting</option>
+										<option value="withdraw_vesting_route">withdraw_vesting_route</option>
+										<option value="witness_update">witness_update</option>
+										<option value="witness_vote">witness_vote</option>
+									</select>
+									filtered from <span class="badge badge-info" id="about-account-count">...</span> transactions
+								</h5>
+							</form>
+							<table class="table table-bordered table-hover table-sm" id="about-account">
+								<thead>
+									<tr class="table-primary">
+										<th scope="col">Time</th>
+										<th scope="col">Transaction ID</th>
+										<th scope="col">From</th>
+										<th scope="col">To</th>
+										<th scope="col">Amount</th>
+										<th scope="col">Memo</th>
+									</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<br>
+			</main>
+		</article>
+		<footer class="footer">
+			<div class="container-fluid">
+				<span class="text-muted">GolosExplorer @ 2018</span>
+			</div>
+		</footer>
+		<div class="lding">
+			<div class="lds-css ng-scope">
+				<div class="lds-cube">
+					<div></div>
+					<div></div>
+					<div></div>
+					<div></div>
+				</div>
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/golos-js@0.6.2/dist/golos.min.js"></script>
+		<script src="https://thednp.github.io/bootstrap.native/dist/bootstrap-native-v4.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.13.1/dist/sweetalert2.all.min.js"></script>
+		<script src="app.js?201804041330"></script>
+	</body>
+</html>
