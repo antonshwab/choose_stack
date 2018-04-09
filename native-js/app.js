@@ -16,6 +16,7 @@ let $aboutAccountCount = document.getElementById('about-account-count');
 let $aboutAccountFilteredCount = document.getElementById('about-account-filtered-count');
 let $aboutAccountFilter = document.getElementById('about-account-filter');
 let $searchAccount = document.getElementById('search-account');
+let $searchAccountInput = $searchAccount.querySelector('.form-control[name="account-username"]');
 
 let loadingShow = function() {
 	$loader.style.display = 'block';
@@ -28,7 +29,7 @@ let accountHistoryFrom = -1;
 let accountHistoryCount = 99;
 let getAccountTransactions = function() {
 	loadingShow();
-	let usernameVal = $searchAccount.querySelector('.form-control[name="account-username"]').value;
+	let usernameVal = $searchAccountInput.value;
 	let operationsCount = 0;
 	$aboutAccountTableTbody.innerHTML = '';
 	golos.api.getAccountHistory(usernameVal, accountHistoryFrom, accountHistoryCount, function(err, transactions) {
@@ -67,7 +68,7 @@ let getAccountTransactions = function() {
 };
 
 $aboutAccountFilter.addEventListener('change', function() {
-	let usernameVal = $searchAccount.querySelector('.form-control[name="account-username"]').value;
+	let usernameVal = $searchAccountInput.value;
 	window.location.hash = `account/${usernameVal}/${$aboutAccountFilter.value}`;
 	getAccountTransactions();
 });
@@ -84,7 +85,7 @@ $searchAccount.addEventListener('submit', function(e) {
 
 $resetAccountBtn.addEventListener('click', function() {
 	$mainPage.style.display = 'flex';
-	$searchAccount.querySelector('.form-control[name="account-username"]').value = '';
+	$searchAccountInput.value = '';
 	$aboutAccountPage.style.display = 'none';
 	$resetAccountBtn.style.display = 'none';
 	window.location.hash = '';
@@ -97,7 +98,7 @@ window.addEventListener('hashchange', function() {
 		if (params[1]) {
 			switch (params[0]) {
 				case 'account': {
-					$searchAccount.querySelector('.form-control[name="account-username"]').value = params[1];
+					$searchAccountInput.value = params[1];
 					if (params[2]) $aboutAccountFilter.value = params[2];
 					$searchAccount.dispatchEvent(new CustomEvent('submit'));
 				}; break;
@@ -106,7 +107,7 @@ window.addEventListener('hashchange', function() {
 	}
 	else {
 		$mainPage.style.display = 'flex';
-		$searchAccount.querySelector('.form-control[name="account-username"]').value = '';
+		$searchAccountInput.value = '';
 		$aboutAccountPage.style.display = 'none';
 		$resetAccountBtn.style.display = 'none';
 	}
