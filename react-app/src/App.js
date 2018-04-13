@@ -2,23 +2,6 @@ import React, { Component } from 'react';
 import './App.css';
 import golos from 'golos-js';
 
-// [
-//   [98915,
-//    {"trx_id":"74a02738e27f53472417e1ca73fc7cb9ee61dd40",
-//     "block":15516328,
-//     "trx_in_block":5,
-//     "op_in_trx":0,
-//     "virtual_op":0,
-//     "timestamp":"2018-04-12T14:08:45",
-//     "op":[
-//       "transfer",
-//       {"from":"maria9",
-//        "to":"bittrex",
-//        "amount":"288.648 GBG",
-//        "memo":"75f2e1f0009f460d8a8"}]}
-//   ]
-// ]
-
 class AccountSearchBar extends React.Component {
   constructor(props) {
     super(props);
@@ -135,10 +118,11 @@ class TableHeaderWithFilter extends React.Component {
 
 class TxRow extends React.Component {
   render () {
-    const {time, txID, from, to, amount, memo} = this.props.tx;
+    const {timestamp, txID, from, to, amount, memo} = this.props.tx;
+    console.log(timestamp, txID, from, to, amount, memo);
     return (
       <tr>
-        <td>{time}</td>
+        <td>{timestamp}</td>
         <td>{txID}</td>
         <td>{from}</td>
         <td>{to}</td>
@@ -149,18 +133,45 @@ class TxRow extends React.Component {
   }
 }
 
+// HOW txs LOOK LIKE:
+// [
+//   [98915,
+//    {"trx_id":"74a02738e27f53472417e1ca73fc7cb9ee61dd40",
+//     "block":15516328,
+//     "trx_in_block":5,
+//     "op_in_trx":0,
+//     "virtual_op":0,
+//     "timestamp":"2018-04-12T14:08:45",
+//     "op":[
+//       "transfer",
+//       {"from":"maria9",
+//        "to":"bittrex",
+//        "amount":"288.648 GBG",
+//        "memo":"75f2e1f0009f460d8a8"}]}
+//   ]
+// ]
+
 class TxsTable extends React.Component {
   render() {
     const filterTx = this.props.filterTx;
-    // const filteredTxs = this.props.txs.filter(x => x);
-    // const rows = filteredTxs.map(tx => <TxRow tx={tx}/>);
     console.log("BEFORE: ", this.props.txs);
-    const preparedTxs = this.props.txs.map(([id, tx]) => tx);
+    const preparedTxs = this.props.txs
+      .filter(([_, tx]) => {
+        const [opKind, opInfo] = tx.op;
+        return filterTx === "" || filterTx === opKind;
+      })
+      .map(([_, tx]) => {
+        const timestamp = tx.timestamp;
+        const txID = tx.trx_id;
+        const [opKind, opInfo] = tx.op;
+        const from = opInfo.from;
+        const to = opInfo.to;
+        const amount = opInfo.amount;
+        const memo = opInfo.memo;
+        return <TxRow key={txID} tx={{timestamp, txID, from, to, amount, memo}}/>
+      });
     console.log("AFTER: ", preparedTxs);
-    //
-    
-    //
-    const rows = [];
+    const rows = preparedTxs;
     return (
       <div>
         <TableHeaderWithFilter onFilterTxSelectChange={this.props.onFilterTxSelectChange}
@@ -224,7 +235,6 @@ class App extends Component {
 
     golos.api.getAccountHistory(account, from, limit)
       .then(txs => {
-        // console.log("res1:", txs);
         this.setState({ loading: false, accountTxs: txs });
       })
       .catch((error) => {
