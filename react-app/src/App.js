@@ -1,24 +1,58 @@
 import React, { Component } from 'react';
 import './App.css';
+import golos from 'golos-js';
 
-const TXS = [
-  ["2018-04-12T09:35:03",	"aa781334709a6fcea2afc412910d9eed5e73005d", "bittrex", 	"kunaio", 	"145.333", "GOLOS", 	"J24JAQD5I"],
-  ["2018-04-12T09:15:45",	"feeb33dbd4349af2dca5128c5503ce4bf891a548", "pgs", 	"bittrex", 	"1500.000", "GOLOS", 	"dfd2b9a6fef9440faac"],
-  ["2018-04-12T09:07:27",	"59381e48f7d19f35e3987e3cd78409d51b812374", "maria9", 	"bittrex", 	"0.001", "GOLOS", 	"363ea3d61fe4434bb48"],
-  ["2018-04-12T09:05:06",	"8d1bfd7e2dcaf50a504f434f492eb3a739917afa", "maria9", 	"bittrex", 	"143.783", "GOLOS", 	"363ea3d61fe4434bb48"],
-  ["2018-04-12T08:40:27",	"6a9813d83d807229dc1f856b6fd8ad4da89617a9", "helly", 	"bittrex", 	"0.001", "GBG", 	"8b95d8f18fdc4394bb7"],
-];
+// [
+//   [98915,
+//    {"trx_id":"74a02738e27f53472417e1ca73fc7cb9ee61dd40",
+//     "block":15516328,
+//     "trx_in_block":5,
+//     "op_in_trx":0,
+//     "virtual_op":0,
+//     "timestamp":"2018-04-12T14:08:45",
+//     "op":[
+//       "transfer",
+//       {"from":"maria9",
+//        "to":"bittrex",
+//        "amount":"288.648 GBG",
+//        "memo":"75f2e1f0009f460d8a8"}]}
+//   ]
+// ]
 
 class AccountSearchBar extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    const account = this.props.account;
+    console.log("FROM handleSUBMIT account:", account);
+    this.props.onAccountSearch(account);
+  }
+
+  handleChange(event) {
+    const account = event.target.value;
+    console.log("FROM handleSUBMIT account:", account)
+    this.props.onSearchInputChange(account);
+  }
+
   render() {
     return (
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <form class="form-inline my-2 my-lg-0 col-sm-3" id="search-account">
-          <div class="input-group">
-            <input type="search" placeholder="Account username" />
-            <div class="input-group-append">
-              <button class="btn btn-danger btn-sm" id="reset-account" type="button"><span class="icon-cross"></span></button>
-              <button class="btn btn-dark btn-sm" type="submit"><span class="icon-user"></span> Get Account</button>
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+        <form onSubmit={this.handleSubmit}
+              className="form-inline my-2 my-lg-0 col-sm-3">
+          <div className="input-group">
+            <input type="text"
+                   value={this.props.account}
+                   onChange={this.handleChange}
+                   placeholder="Account username" />
+            <div className="input-group-append">
+              <button className="btn btn-danger btn-sm" id="reset-account" type="submit"><span className="icon-cross"></span></button>
+              <button className="btn btn-dark btn-sm" type="submit"><span className="icon-user"></span> Get Account</button>
             </div>
           </div>
         </form>
@@ -27,29 +61,24 @@ class AccountSearchBar extends React.Component {
   }
 }
 
-const Header = props => {
-  return (
-    <header className="App-header">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <a class="navbar-brand" href="#">GolosExplorer</a>
-        <AccountSearchBar />
-      </nav>
-    </header>
-  );
-};
-
-
 
 class TableHeaderWithFilter extends React.Component {
   constructor(props) {
     super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    this.props.onFilterTxSelectChange(event.target.value);
   }
 
   render() {
+    const filterTx = this.props.filterTx;
+    console.log("FILTER tx:", filterTx);
     return (
       <h5>
-        Total <span class="badge badge-info">{999}</span> transactions, showing <span class="badge badge-info">{100}</span> transactions,        
-          <select>
+        Total <span className="badge badge-info">{999}</span> transactions, showing <span className="badge badge-info">{100}</span> transactions,
+          <select value={filterTx} onChange={this.handleChange}>
             <option value="">none</option>
             <option value="account_create">account_create</option>
             <option value="account_update">account_update</option>
@@ -87,7 +116,7 @@ class TableHeaderWithFilter extends React.Component {
             <option value="recover_account_recovery">recover_account_recovery</option>
             <option value="set_withdraw_vesting_route">set_withdraw_vesting_route</option>
             <option value="shutdown_witness">shutdown_witness</option>
-            <option value="transfer" selected="">transfer</option>
+            <option value="transfer">transfer</option>
             <option value="transfer_from_savings">transfer_from_savings</option>
             <option value="transfer_to_savings">transfer_to_savings</option>
             <option value="transfer_to_vesting">transfer_to_vesting</option>
@@ -98,15 +127,15 @@ class TableHeaderWithFilter extends React.Component {
             <option value="witness_update">witness_update</option>
             <option value="witness_vote">witness_vote</option>
           </select>
-        filtered from <span class="badge badge-info" id="about-account-count">{100}</span> transactions
+        filtered from <span className="badge badge-info" id="about-account-count">{100}</span> transactions
       </h5>
     );
-  }  
+  }
 }
 
 class TxRow extends React.Component {
   render () {
-    const [time, txID, from, to, amount, memo] = this.props.tx;
+    const {time, txID, from, to, amount, memo} = this.props.tx;
     return (
       <tr>
         <td>{time}</td>
@@ -117,18 +146,25 @@ class TxRow extends React.Component {
         <td>{memo}</td>
       </tr>
     );
-
   }
 }
 
-
 class TxsTable extends React.Component {
   render() {
-    const rows = this.props.txs.map(tx => <TxRow tx={tx}/>);
-
+    const filterTx = this.props.filterTx;
+    // const filteredTxs = this.props.txs.filter(x => x);
+    // const rows = filteredTxs.map(tx => <TxRow tx={tx}/>);
+    console.log("BEFORE: ", this.props.txs);
+    const preparedTxs = this.props.txs.map(([id, tx]) => tx);
+    console.log("AFTER: ", preparedTxs);
+    //
+    
+    //
+    const rows = [];
     return (
       <div>
-        <TableHeaderWithFilter />
+        <TableHeaderWithFilter onFilterTxSelectChange={this.props.onFilterTxSelectChange}
+                               filterTx={this.props.filterTx}/>
         <table>
           <thead>
             <tr>
@@ -149,20 +185,70 @@ class TxsTable extends React.Component {
 
 const Footer = props => {
   return (
-    <footer class="footer">
-      <div class="container-fluid">
-        <span class="text-muted">GolosExplorer @ 2018</span>
+    <footer className="footer">
+      <div className="container-fluid">
+        <span className="text-muted">GolosExplorer @ 2018</span>
       </div>
     </footer>
   );
 };
 
+
+
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      account: '',
+      filterTx: '',
+      accountTxs: [],
+    };
+
+    this.handleAccountSearch = this.handleAccountSearch.bind(this);
+    this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+    this.handleFilterTxSelectChange = this.handleFilterTxSelectChange.bind(this);
+  }
+
+  handleFilterTxSelectChange(filterTx) {
+    this.setState({ filterTx });
+  }
+
+  handleSearchInputChange(account) {
+    this.setState({ account });
+  }
+
+  handleAccountSearch(account) {
+    const from = -1;
+    const limit = 99;
+
+    golos.api.getAccountHistory(account, from, limit)
+      .then(txs => {
+        // console.log("res1:", txs);
+        this.setState({ loading: false, accountTxs: txs });
+      })
+      .catch((error) => {
+        console.error(error);
+        this.setState({ loading: false, error });
+      });
+  }
+
   render() {
     return (
       <div className="App">
-        <Header />
-        <TxsTable txs={TXS}/>
+        <header className="App-header">
+          <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a className="navbar-brand" href="#">GolosExplorer</a>
+            <AccountSearchBar // TODO: add reset handler
+              account={this.state.account}
+              onAccountSearch={this.handleAccountSearch}
+              onSearchInputChange={this.handleSearchInputChange} />
+          </nav>
+        </header>
+        <TxsTable txs={this.state.accountTxs}
+                  filterTx={this.state.filterTx}
+                  loading={this.state.loading}
+                  onFilterTxSelectChange={this.handleFilterTxSelectChange} />
         <Footer />
       </div>
     );
