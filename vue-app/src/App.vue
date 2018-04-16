@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <HelloWorld/>
-    <SearchBar/>
+    <!-- <HelloWorld/> -->
+    <SearchBar v-on:account-input="getAccountTxs($event)"/>
     <!-- <TableHeader/> -->
     <!-- <Table/> -->
   </div>
@@ -17,6 +17,11 @@ export default {
   components: {
     HelloWorld,
     SearchBar,
+  },
+  methods: {
+    getAccountTxs(account) {
+      console.log("TOP:", account);
+    }
   },
 };
 </script>

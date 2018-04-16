@@ -1,17 +1,19 @@
 <template>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <form
-      v-on:submit.prevent="getAccountTxs"
       class="form-inline my-2 my-lg-0 col-sm-3">
       <div class="input-group">
         <input
           type="text"
+          v-bind:value="account"
+          v-on:input="account = $event.target.value"
           v-bind:placeholder='account' />
         <div class="input-group-append">
           <button
             class="btn btn-dark btn-sm"
+            v-on:click.prevent="onAccountInput"
             type="submit">
-            <span class="icon-user"></span> Get Account
+            <span class="icon-user"></span> Get transaction
           </button>
         </div>
       </div>
@@ -24,12 +26,16 @@ export default {
   name: 'SearchBar',
   data() {
     return {
-      account: 'bittrex',
+      account: '',
     };
   },
   methods: {
-    // eslint-disable-next-line
-    getAccountTxs: event => console.log('from getAccountTxs:', event.target.value),
+    // eslint-disable
+    onAccountInput() {
+      const vm = this;
+      console.log('from onAccountInput:', vm.account);
+      vm.$emit('account-input', vm.account);
+    },
   },
 };
 </script>
