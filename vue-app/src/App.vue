@@ -8,7 +8,6 @@
 
 <script>
 import golos from 'golos-js';
-import HelloWorld from './components/HelloWorld';
 import SearchBar from './components/SearchBar';
 import TableHeader from './components/TableHeader';
 import Table from './components/Table';
@@ -19,7 +18,6 @@ export default {
     SearchBar,
     TableHeader,
     Table,
-    // TxRow,
   },
   data() {
     return {
@@ -29,8 +27,8 @@ export default {
   },
   methods: {
     getAccountTxs(account) {
-      const vm = this;      
-      console.log("TOP:", account);
+      const vm = this;
+      console.log('TOP:', account);
 
       const from = -1;
       const limit = 99;

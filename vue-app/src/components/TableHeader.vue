@@ -1,8 +1,8 @@
 </<template>
   <select v-model="txFilter">
-    <option 
-      v-for="option in options" 
-      v-bind:value="option.value" 
+    <option
+      v-for="option in options"
+      v-bind:value="option.value"
       v-on:click.prevent="onSelect">
       {{ option.text }}
     </option>
@@ -64,15 +64,15 @@ export default {
         { value: 'withdraw_vesting_route', text: 'withdraw_vesting_route' },
         { value: 'witness_update', text: 'witness_update' },
         { value: 'witness_vote', text: 'witness_vote' },
-      ]
+      ],
     };
   },
   methods: {
     onSelect() {
       const vm = this;
-      console.log("FROM onSelect!!", vm.txFilter);
+      console.log('FROM onSelect!!', vm.txFilter);
       vm.$emit('select-tx-filter', vm.txFilter);
-    }
+    },
   },
-}
+};
 </script>

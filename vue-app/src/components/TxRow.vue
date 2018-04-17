@@ -15,7 +15,7 @@ export default {
   props: {
     tx: {
       type: Object,
-    }
+    },
   },
-}
+};
 </script>
