@@ -13,7 +13,7 @@
             class="btn btn-dark btn-sm"
             v-on:click.prevent="onAccountInput"
             type="submit">
-            <span class="icon-user"></span> Get transaction
+            <span class="icon-user"></span> Get transactions
           </button>
         </div>
       </div>
@@ -30,7 +30,6 @@ export default {
     };
   },
   methods: {
-    // eslint-disable
     onAccountInput() {
       const vm = this;
       console.log('from onAccountInput:', vm.account);
