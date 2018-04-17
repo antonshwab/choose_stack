@@ -1,7 +1,7 @@
 # vue-app
 
 > A Vue.js project
-> 
+> https://antonshwab.github.io/choose_stack/vue-app/dist/
 
 ## Build Setup
 
